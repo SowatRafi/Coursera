@@ -1,0 +1,75 @@
+Please follow these steps to complete the lab:
+
+1. Once you are connected to the SSH, please execute these commands one by one:
+
+cd /etc/puppet/code/environments/production/modules/packages
+
+sudo chmod 646 manifests/init.pp
+
+nano manifests/init.pp
+
+It will open the nano editor. Please remove all the existing code and add the content of the attached file packages_manifests_init_pp.txt. Once done, please press CTRL+C, Enter and then CTRL+X to save and exit from the file.
+
+gcloud compute instances describe linux-instance --zone=us-central1-a --format='get(networkInterfaces[0].accessConfigs[0].natIP)'​
+
+It will provide an IP for linux-instance. Please connect to the instance by following the steps of "Accessing the virtual machine" section as per your OS and make sure to use the IP given in the output.
+
+Now, in the linux-instance terminal, execute these:
+
+sudo puppet agent -v --test
+
+apt policy golang
+
+After this, please go back to the Puppet terminal and execute these:
+
+cd /etc/puppet/code/environments/production/modules/machine_info
+
+cat manifests/init.pp
+
+sudo chmod 646 manifests/init.pp
+
+nano manifests/init.pp
+
+It will open the nano editor. Please remove the complete content and add the content of the attached file machine_info_manifests_init_pp.txt. Once done, please press CTRL+C, Enter and then CTRL+X to save and exit from the file.
+
+cat templates/info.erb
+
+sudo chmod 646 templates/info.erb
+
+nano templates/info.erb
+
+It will open the nano editor. Please add the following line just below the Proccessor fact (Refer to the attached screenshot fact.png)
+
+Network Interfaces: <%= @interfaces %>
+
+Once done, please press CTRL+C, Enter and then CTRL+X to save and exit from the file.
+
+Return back to the linux-instance terminal and execute this:
+
+sudo puppet agent -v --test
+
+After this, in the Puppet terminal, execute these:
+
+sudo mkdir -p /etc/puppet/code/environments/production/modules/reboot/manifests
+
+cd /etc/puppet/code/environments/production/modules/reboot/manifests
+
+sudo touch init.pp
+
+sudo nano init.pp​
+
+It will open the nano editor. Please remove the complete content and add the content of the attached file reboot_manifest_init_pp.txt. Once done, please press CTRL+C, Enter and then CTRL+X to save and exit from the file.
+
+sudo nano /etc/puppet/code/environments/production/manifests/site.pp
+
+It will open the nano editor. Please add the following line just below the line " class { 'machine_info': }" (Refer to the attached screenshot class.png)
+
+class { 'reboot': }
+
+Once done, please press CTRL+C, Enter and then CTRL+X to save and exit from the file.
+
+Go back to the linux-instance terminal and execute this:
+
+sudo puppet agent -v --test
+
+Hope this helps!
